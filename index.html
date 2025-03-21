@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <meta name="description" content="Stopwatch">
+    <style>
+    body{
+        display: flex;
+        
+       
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+
+    }
+    .btn{
+        display: flex;
+        justify-content: center;
+    }
+ .main{border: 2px solid black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    padding: 70px;border-radius: 15px;
+    background: rgb(216, 207, 179);
+ }
+ .container{max-width: 1200px;margin: auto;}
+ .row{display: grid;grid-template-columns: repeat(12,1fr);}
+ .col-12{grid-column: span 12;}
+    button{ margin:15px;}
+    #start{background:rgb(55, 192, 55);border:none;padding: 10px;border-radius: 10px;font-weight: 600;}
+    #stop{background: rgb(221, 17, 17);border:none;padding: 10px;border-radius: 10px;font-weight: 600;}
+    #restart{background: rgb(0, 0, 255);border:none;padding: 10px;border-radius: 10px;font-weight: 600;}
+   
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+        <div class="row">
+            <div class="col-12">
+        <h1 id="stopwatch">00:00:00:00</h1>
+        <div class="btn">
+        <button id="start">Start</button>
+        <button id="stop" disabled> Stop</button>
+        <button id="restart" disabled>Restart</button>
+        
+        </div>
+    </div>
+    </div>
+        </div>
+    </div>
+   <script>
+    let stopwatch=document.getElementById('stopwatch');
+    let hr=0;
+    let min=0;
+    let second=0
+    let ms=0;
+    let id;
+    function timeUpdate(){
+        stopwatch.innerHTML=
+        (hr<10?'0':'')+hr +':'+
+        (min<10?'0':'')+min +':'+
+        (second<10?'0':'')+second+':'+
+        (ms < 10 ? '0' + ms : ms); // Ensure two-digit format for ms
+
+
+    }
+
+    let start=document.getElementById('start');
+    let stop=document.getElementById('stop');
+    let restart=document.getElementById('restart');
+    function startStopwatch(){
+       start.disabled=true;
+        stop.disabled=false;
+        restart.disabled=false;
+        id=setInterval(()=>{
+            ms++;
+                if (ms == 100) { // Reset at 100 (since we count in 10ms intervals)
+                    ms = 0;
+                    second++;
+                }
+           
+            if(second==60){
+                second=0;
+                ++min;
+            }
+            if(min==60){
+                min=0;
+                ++hr;
+            }
+            timeUpdate();
+        },10)
+    }
+
+    function stopStopwatch(){
+        stop.disabled=true;
+        start.disabled=false;
+        restart.disabled=false;
+        clearInterval(id);
+    }
+    function restartStopWatch(){
+        start.disabled=false;
+        stop.disabled=true;
+        restart.disabled=true;
+        clearInterval(id);
+        min=0;
+        second=0;
+        hr=0;
+        ms=0;
+        timeUpdate();
+    }
+
+
+    start.addEventListener("click",startStopwatch);
+    stop.addEventListener("click",stopStopwatch);
+    //for restart
+    restart.addEventListener("click",restartStopWatch);
+
+       
+    
+   
+   </script>
+</body>
+</html>
